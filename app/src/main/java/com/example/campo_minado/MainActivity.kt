@@ -1,47 +1,40 @@
 package com.example.campo_minado
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.campo_minado.ui.theme.CampoMinadoTheme
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.campo_minado.databinding.ActivityMainBinding
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            CampoMinadoTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.btnStartGame.setOnClickListener {
+            val playerName = binding.etPlayerName.text.toString().trim()
+            if (playerName.isNotEmpty()) {
+                val intent = Intent(this, GameActivity::class.java)
+                intent.putExtra("PLAYER_NAME", playerName)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Por favor, digite seu nome", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CampoMinadoTheme {
-        Greeting("Android")
+        binding.btnViewHistory.setOnClickListener {
+            val playerName = binding.etPlayerName.text.toString().trim()
+            val intent = Intent(this, HistoryActivity::class.java)
+            if (playerName.isNotEmpty()) {
+                intent.putExtra("PLAYER_NAME", playerName)
+            } else {
+                intent.putExtra("PLAYER_NAME", "Anônimo")
+            }
+            startActivity(intent)
+        }
     }
 }

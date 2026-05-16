@@ -1,0 +1,9 @@
+CREATE DATABASE IF NOT EXISTS minesweeper_db;
+USE minesweeper_db;
+
+CREATE TABLE IF NOT EXISTS matches (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    player_name VARCHAR(100) NOT NULL,
+    score INT NOT NULL,
+    date DATETIME DEFAULT CURRENT_TIMESTAMP
+);
