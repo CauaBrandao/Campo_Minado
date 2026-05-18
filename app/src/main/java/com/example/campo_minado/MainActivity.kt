@@ -15,26 +15,25 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val playerName = intent.getStringExtra("PLAYER_NAME") ?: "Anônimo"
+        binding.tvWelcome.text = "Bem-vindo, $playerName!"
+
         binding.btnStartGame.setOnClickListener {
-            val playerName = binding.etPlayerName.text.toString().trim()
-            if (playerName.isNotEmpty()) {
-                val intent = Intent(this, GameActivity::class.java)
-                intent.putExtra("PLAYER_NAME", playerName)
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, "Por favor, digite seu nome", Toast.LENGTH_SHORT).show()
-            }
+            val intent = Intent(this, GameActivity::class.java)
+            intent.putExtra("PLAYER_NAME", playerName)
+            startActivity(intent)
         }
 
         binding.btnViewHistory.setOnClickListener {
-            val playerName = binding.etPlayerName.text.toString().trim()
             val intent = Intent(this, HistoryActivity::class.java)
-            if (playerName.isNotEmpty()) {
-                intent.putExtra("PLAYER_NAME", playerName)
-            } else {
-                intent.putExtra("PLAYER_NAME", "Anônimo")
-            }
+            intent.putExtra("PLAYER_NAME", playerName)
             startActivity(intent)
+        }
+
+        binding.btnLogout.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }

@@ -1,0 +1,68 @@
+# Relatório Final: Projeto Campo Minado (Android + PHP API)
+
+Este documento descreve toda a estrutura do projeto Campo Minado desenvolvido, detalhando as funcionalidades e as adições finais solicitadas (Login e Menu). Você pode usar as informações deste relatório como base para a sua apresentação!
+
+## Arquitetura do Projeto
+
+O projeto foi dividido em duas partes principais:
+1.  **Frontend (Aplicativo Android)**: Desenvolvido nativamente usando Kotlin e o padrão de layouts em XML.
+2.  **Backend (API Web)**: Desenvolvido com PHP puro e banco de dados MySQL para persistir o histórico das partidas.
+
+---
+
+## 1. O Aplicativo (Frontend)
+
+O aplicativo conta com uma navegação bem estruturada composta por 4 telas (Activities) interligadas:
+
+### A. Tela de Login (`LoginActivity`)
+- **Objetivo:** Ser a porta de entrada (Launcher) do aplicativo.
+- **Funcionamento:** Solicita que o usuário insira um "Usuário" e uma "Senha". Ao clicar em "Entrar", o aplicativo faz uma validação local para garantir que os campos não estão vazios. Se tudo estiver correto, o nome do usuário é passado para o Menu Principal.
+
+### B. Menu Principal (`MainActivity`)
+- **Objetivo:** Centralizar a navegação do jogador.
+- **Funcionamento:** Exibe uma saudação personalizada ("Bem-vindo, [Usuário]!") utilizando o nome informado na tela de Login. A partir desta tela, o jogador pode:
+  - **Iniciar Jogo:** Redireciona para a tela do Campo Minado, repassando o nome do jogador.
+  - **Ver Histórico:** Abre a lista de pontuações globais do jogo.
+  - **Sair:** Desloga o usuário e o envia de volta para a tela de Login.
+
+### C. A Tela do Jogo (`GameActivity`)
+- **Objetivo:** Onde a mágica acontece! É a implementação lógica do Campo Minado.
+- **Funcionamento:**
+  - Gera dinamicamente um Grid 8x8 contendo 10 minas aleatórias.
+  - Calcula a proximidade das bombas e exibe os números indicativos quando o jogador clica em um bloco seguro.
+  - Expande automaticamente os blocos vazios próximos se não houver bombas aos arredores.
+  - Calcula a pontuação e detecta a condição de Vitória (todas as casas seguras abertas) ou Derrota (clique em uma bomba).
+  - Ao finalizar a partida (ganhando ou perdendo), a pontuação é automaticamente **salva no banco de dados** via uma requisição HTTP.
+
+### D. Tela de Histórico (`HistoryActivity`)
+- **Objetivo:** Listar a pontuação de todos os jogadores.
+- **Funcionamento:** Realiza uma requisição para a API (`api.php`), recebe as partidas cadastradas em formato JSON e as exibe usando uma `RecyclerView` (lista).
+
+---
+
+## 2. A API e Banco de Dados (Backend)
+
+O backend roda em um servidor web local (XAMPP).
+
+### Banco de Dados (`database.sql`)
+Criamos um banco de dados relacional chamado `minesweeper_db` contendo a tabela `matches`.
+Ela armazena as seguintes colunas:
+- `id`: Identificador único da partida.
+- `player_name`: Nome do usuário que jogou.
+- `score`: A pontuação atingida naquela rodada.
+- `date`: Data e hora de quando a partida finalizou.
+
+### API (`api.php`)
+Atua como ponte entre o App Android e o MySQL, respondendo no formato padrão JSON.
+- **Rota `GET`**: Busca todas as partidas na tabela (ordenadas das mais recentes para as mais antigas) e as retorna para alimentar a Tela de Histórico do App.
+- **Rota `POST`**: Recebe o nome e o score de uma nova partida enviada pelo App e faz a inserção (`INSERT`) na tabela.
+
+---
+
+> [!TIP]
+> **Dica para a apresentação:** Destaque o fato de que o App integra dados localmente na navegação do Android (usando _Intents_ para passar o nome do usuário entre o Login, Menu e Jogo) e se comunica de forma assíncrona com o mundo externo (a API em PHP) usando a biblioteca _Retrofit_. Isso mostra que você trabalhou a integração ponta a ponta (Full-stack mobile)!
+
+## Mudanças Recentes Realizadas
+Para adequar ao escopo final, alteramos:
+- Adição da `LoginActivity` ao `AndroidManifest.xml` como a página primária.
+- Modificação do layout da `MainActivity` (`activity_main.xml`), removendo os campos de digitação avulsos, tornando-a uma verdadeira página de roteamento (Hub de navegação), com saudação dinâmica e botão de _logout_.

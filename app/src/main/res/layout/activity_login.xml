@@ -9,39 +9,32 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Campo Minado"
+        android:text="Login"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:id="@+id/tvWelcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bem-vindo, Jogador!"
-        android:textSize="18sp"
         android:layout_marginBottom="32dp"/>
 
-    <Button
-        android:id="@+id/btnStartGame"
+    <EditText
+        android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Iniciar Jogo"
+        android:hint="Usuário"
+        android:inputType="textPersonName"
         android:layout_marginBottom="16dp"/>
 
-    <Button
-        android:id="@+id/btnViewHistory"
+    <EditText
+        android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ver Histórico"
-        android:layout_marginBottom="16dp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+        android:hint="Senha"
+        android:inputType="textPassword"
+        android:layout_marginBottom="24dp"/>
 
     <Button
-        android:id="@+id/btnLogout"
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sair"
-        style="@style/Widget.MaterialComponents.Button.TextButton"/>
+        android:text="Entrar"
+        android:layout_marginBottom="16dp"/>
 
 </LinearLayout>
