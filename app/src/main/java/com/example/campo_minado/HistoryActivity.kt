@@ -24,16 +24,17 @@ class HistoryActivity : AppCompatActivity() {
         playerName = intent.getStringExtra("PLAYER_NAME") ?: "Anônimo"
         binding.tvPlayerName.text = "Jogador Atual: $playerName"
 
-        binding.recyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 1)
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
         fetchHistory()
     }
 
     private fun fetchHistory() {
-        RetrofitClient.instance.getHistory().enqueue(object : Callback<List<MatchResult>> {
+        RetrofitClient.instance.getMatches().enqueue(object : Callback<List<MatchResult>> {
             override fun onResponse(call: Call<List<MatchResult>>, response: Response<List<MatchResult>>) {
                 if (response.isSuccessful) {
                     val matches = response.body() ?: emptyList()
+                    // Passa a lista vinda do PHP diretamente para o seu Adapter
                     val adapter = HistoryAdapter(matches)
                     binding.recyclerView.adapter = adapter
                 } else {
